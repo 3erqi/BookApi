@@ -512,3 +512,4 @@
 /home/evanbergqvist/Documents/BookApi/obj/Debug/net10.0/BookApi.pdb
 /home/evanbergqvist/Documents/BookApi/obj/Debug/net10.0/BookApi.genruntimeconfig.cache
 /home/evanbergqvist/Documents/BookApi/obj/Debug/net10.0/ref/BookApi.dll
+/home/evanbergqvist/Documents/BookApi/obj/Debug/net10.0/BookApi.sourcelink.json

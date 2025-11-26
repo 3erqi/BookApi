@@ -23,7 +23,21 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",
         policy => policy
-            .WithOrigins("http://localhost:4200", "http://localhost:4201")
+            .SetIsOriginAllowed(origin => 
+            {
+                // Allow localhost for development
+                if (origin.StartsWith("http://localhost") || origin.StartsWith("https://localhost"))
+                    return true;
+                
+                // Allow any Netlify subdomain
+                if (origin.EndsWith(".netlify.app"))
+                    return true;
+                
+                // Add your specific production domains here if needed
+                // Example: if (origin == "https://yourdomain.com") return true;
+                
+                return false;
+            })
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
@@ -69,4 +83,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+// Use the PORT environment variable if available (for Heroku deployment)
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5156";
+app.Run($"http://0.0.0.0:{port}");
