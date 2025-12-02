@@ -29,6 +29,16 @@ builder.Services.AddCors(options =>
                 if (origin.StartsWith("http://localhost") || origin.StartsWith("https://localhost"))
                     return true;
                 
+                // Allow local network IPs (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
+                if (origin.StartsWith("http://192.168.") || origin.StartsWith("https://192.168.") ||
+                    origin.StartsWith("http://10.") || origin.StartsWith("https://10.") ||
+                    (origin.StartsWith("http://172.") || origin.StartsWith("https://172.")))
+                    return true;
+                
+                // Allow ngrok URLs
+                if (origin.Contains(".ngrok") || origin.Contains("ngrok.io") || origin.Contains("ngrok-free.app"))
+                    return true;
+                
                 // Allow any Netlify subdomain
                 if (origin.EndsWith(".netlify.app"))
                     return true;
