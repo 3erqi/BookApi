@@ -131,4 +131,25 @@ public class BooksController : ControllerBase
         return NoContent();
     }
 
+    // GET: api/Books/all - Get all books in the database (public view)
+    [HttpGet("all")]
+    [AllowAnonymous] // Allow access without authentication
+    public async Task<ActionResult<IEnumerable<object>>> GetAllBooks()
+    {
+        var books = await _context.Books
+            .Include(b => b.User) // Include user information
+            .Select(b => new {
+                Id = b.Id,
+                Title = b.Title,
+                Author = b.Author,
+                PublishedDate = b.PublishedDate,
+                Genre = b.Genre,
+                Isbn = b.Isbn,
+                AddedBy = b.User != null ? b.User.Username : "Unknown" // Include who added the book
+            })
+            .ToListAsync();
+
+        return Ok(books);
+    }
+
 }

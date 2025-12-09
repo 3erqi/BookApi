@@ -156,4 +156,22 @@ public class QuotesController : ControllerBase
 
         return NoContent();
     }
+
+    // GET: api/Quotes/all - Get all quotes from all users (public endpoint)
+    [AllowAnonymous]
+    [HttpGet("all")]
+    public async Task<ActionResult<IEnumerable<object>>> GetAllQuotes()
+    {
+        var quotes = await _context.Quotes
+            .Include(q => q.User)
+            .Select(q => new {
+                Id = q.Id,
+                Text = q.Text,
+                Author = q.Author,
+                AddedBy = q.User.Username
+            })
+            .ToListAsync();
+
+        return Ok(quotes);
+    }
 }
